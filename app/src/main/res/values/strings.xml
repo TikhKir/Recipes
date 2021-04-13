@@ -1,0 +1,20 @@
+<resources>
+
+    <string-array name="searching_type">
+        <item>by name</item>
+        <item>by description</item>
+        <item>by instruction</item>
+    </string-array>
+
+    <string-array name="sorting_type">
+        <item>by name (A-Z)</item>
+        <item>by name (Z-A)</item>
+        <item>by update (A-Z)</item>
+        <item>by update (Z-A)</item>
+    </string-array>
+
+    <string name="app_name">Recipes</string>
+    <string name="photo_of_recipe">Photo of recipe</string>
+    <string name="search">Search</string>
+    <string name="search_over">Search over</string>
+</resources>
