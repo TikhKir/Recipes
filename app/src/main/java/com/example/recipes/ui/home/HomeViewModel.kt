@@ -1,11 +1,10 @@
 package com.example.recipes.ui.home
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipes.local.LocalDataSource
-import com.example.recipes.network.NetworkDataSource
-import com.example.recipes.network.NetworkDataSourceImpl
+import com.example.recipes.repository.RecipeRepository
 import com.example.recipes.repository.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,15 +13,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val network: NetworkDataSource,
-    private val local: LocalDataSource
+    private val repo: RecipeRepository
 ) : ViewModel() {
-
-
 
     companion object {
         private const val TAG = "HOME_VIEW_MODEL"
     }
+
+    private val recipesMutable = MutableLiveData<List<Recipe>>()
+    val recipesLiveData get() = recipesMutable
+
 
     init {
         getRecipes()
@@ -31,24 +31,17 @@ class HomeViewModel @Inject constructor(
 
 
     private fun getRecipes() = viewModelScope.launch(Dispatchers.IO) {
-        network.getRecipeList()
+        repo.getRecipes()
             .onSuccess {
-                it.map { Log.e(TAG, it.name ) }
-                saveRecipes(it)
+                it.map { Log.e(TAG, it.name) }
             }.onError {
-                Log.e(TAG, it.message.toString() )
+                Log.e(TAG, it.message.toString())
             }
     }
 
-    private fun getRecipeByUUID(uuid: String) = viewModelScope.launch(Dispatchers.IO) {
-        network.getRecipeByUUID(uuid)
-            .onSuccess { Log.e(TAG, it.name ) }
-            .onError { Log.e(TAG, it.message.toString() ) }
-    }
 
-    private fun saveRecipes(recipes: List<Recipe>) = viewModelScope.launch(Dispatchers.IO) {
-        local.saveRecipes(recipes)
-    }
+
+
 
 
 }

@@ -4,18 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.recipes.local.converters.ImageConverter
+import com.example.recipes.local.converters.SimilarRecipeConverter
 import com.example.recipes.local.model.RecipeDB
-import com.example.recipes.local.model.SimilarRecipeDB
 
-@Database(
-    entities = [
-        RecipeDB::class,
-        SimilarRecipeDB::class
-    ],
-    version = 1,
-    exportSchema = false
-)
-@TypeConverters(ImageConverter::class)
+@Database(entities = [RecipeDB::class], version = 1, exportSchema = false)
+@TypeConverters(ImageConverter::class, SimilarRecipeConverter::class)
 abstract class RecipeDatabase : RoomDatabase() {
 
     companion object {
