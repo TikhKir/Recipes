@@ -1,11 +1,14 @@
 package com.example.recipes.ui.home
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipes.domain.GetRecipesUseCase
 import com.example.recipes.domain.model.Recipe
+import com.example.recipes.repository.RecipeRepository
+import com.example.recipes.utils.State
 import com.example.recipes.utils.filterparameters.SearchType
 import com.example.recipes.utils.filterparameters.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,39 +18,67 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getRecipesUseCase: GetRecipesUseCase
+    private val getRecipesUseCase: GetRecipesUseCase,
+    private val repo: RecipeRepository
 ) : ViewModel() {
     companion object {
         private const val TAG = "HOME_VIEW_MODEL"
     }
 
 
-
-    private val searchType = MutableLiveData<SearchType>(SearchType.ByName)
-    private val sortType = MutableLiveData<SortType>(SortType.Missing)
+    private var searchType : SearchType = SearchType.ByName
+    private var sortType : SortType = SortType.Unsorted
 
     private val recipesMutable = MutableLiveData<List<Recipe>>()
-    val recipesLiveData get() = recipesMutable
+    val recipesLD : LiveData<List<Recipe>> get() = recipesMutable
 
+    private val state = MutableLiveData<State>(State.Default)
+    val stateLD: LiveData<State> get() = state
 
     init {
-        getRecipes()
+        //getRecipes()
         //getRecipeByUUID("fc988768-c1e9-11e6-a4a6-cec0c932ce01")
     }
 
+    fun setSearchSpinnerState(position: Int) {
+        searchType = when (position) {
+            1 -> SearchType.ByDescription
+            2 -> SearchType.ByInstruction
+            else -> SearchType.ByName
+        }
+    }
 
-    private fun getRecipes() = viewModelScope.launch(Dispatchers.IO) {
-        getRecipesUseCase.execute("goat", SearchType.ByName, SortType.Missing)
-            .onSuccess {
-                it.map { Log.e(TAG, it.name) }
-            }.onError {
-                Log.e(TAG, it.message.toString())
-            }
+    fun setSortSpinnerState(position: Int) {
+        sortType = when(position) {
+            1 -> SortType.ByNameAsc
+            2 -> SortType.ByNameDesc
+            3 -> SortType.ByLastUpdateAsc
+            4 -> SortType.ByLastUpdateDesc
+            else -> SortType.Unsorted
+        }
     }
 
 
 
 
+
+
+
+
+
+
+    private fun getRecipes() = viewModelScope.launch(Dispatchers.IO) {
+        state.postValue(State.Loading)
+        getRecipesUseCase.execute(null, SearchType.ByName, SortType.ByNameAsc)
+            .onSuccess {
+                it.map { Log.e(TAG, it.name) }
+                recipesMutable.postValue(it)
+                state.postValue(State.Success)
+            }.onError {
+                Log.e(TAG, it.message.toString())
+                state.postValue(State.Error(it.message.toString()))
+            }
+    }
 
 
 }

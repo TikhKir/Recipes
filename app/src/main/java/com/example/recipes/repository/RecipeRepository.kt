@@ -7,7 +7,6 @@ interface RecipeRepository {
 
     suspend fun getRecipes(): Result<List<Recipe>>
 
-
     suspend fun getRecipeByUUID(uuid: String): Result<Recipe>
 
 }

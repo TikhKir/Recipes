@@ -16,14 +16,14 @@ class NetworkDataSourceImpl @Inject constructor(
 
 
     override suspend fun getRecipeList(): Result<List<Recipe>> =
-        executeApiCall { recipeService.getRecipes() }
+        safeExecuteAndWrap { recipeService.getRecipes() }
             .transformInside(::rawResponseToRecipeList)
 
     override suspend fun getRecipeByUUID(uuid: String): Result<Recipe> =
-        executeApiCall { recipeService.getRecipeByUUID(uuid) }
+        safeExecuteAndWrap { recipeService.getRecipeByUUID(uuid) }
             .transformInside(::rawResponseSingleToRecipe)
 
-    private suspend fun <T> executeApiCall(
+    private suspend fun <T> safeExecuteAndWrap(
         coroutine: suspend () -> T,
     ): Result<T> {
         return withContext(Dispatchers.IO) {

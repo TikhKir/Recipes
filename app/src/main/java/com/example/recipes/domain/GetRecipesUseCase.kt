@@ -11,6 +11,30 @@ class GetRecipesUseCase @Inject constructor(
     private val repository: RecipeRepository
 ) {
 
+    suspend fun execute(searchQuery: String?, searchType: SearchType, sortType: SortType)
+            : Result<List<Recipe>> = repository.getRecipes()
+        .transformInside { list -> strictSearch(list, searchQuery, searchType) }
+        .transformInside { list -> sortByParameters(list, sortType) }
+
+
+    private fun strictSearch(list: List<Recipe>, searchQuery: String?, searchType: SearchType)
+            : List<Recipe> =
+        if (searchQuery != null)
+            when (searchType) {
+                SearchType.ByName -> filterByName(searchQuery, list)
+                SearchType.ByDescription -> filterByDescription(searchQuery, list)
+                SearchType.ByInstruction -> filterByInstructions(searchQuery, list)
+            } else list
+
+    private fun sortByParameters(list: List<Recipe>, sortType: SortType): List<Recipe> =
+        when (sortType) {
+            SortType.Unsorted -> list
+            SortType.ByNameAsc -> list.sortedBy { it.name }
+            SortType.ByNameDesc -> list.sortedByDescending { it.name }
+            SortType.ByLastUpdateAsc -> list.sortedBy { it.lastUpdated }
+            SortType.ByLastUpdateDesc -> list.sortedByDescending { it.lastUpdated }
+        }
+
     private fun filterByName(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
         recipes.filter { it.name.capitalize().contains(searchQuery.capitalize()) }
 
@@ -20,22 +44,4 @@ class GetRecipesUseCase @Inject constructor(
     private fun filterByInstructions(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
         recipes.filter { it.instructions.capitalize().contains(searchQuery.capitalize()) }
 
-
-    suspend fun execute(searchQuery: String?, searchType: SearchType, sortType: SortType)
-            : Result<List<Recipe>> = repository.getRecipes()
-        .transformInside { list ->
-            if (searchQuery != null)
-                when (searchType) {
-                    SearchType.ByName -> filterByName(searchQuery, list)
-                    SearchType.ByDescription -> filterByDescription(searchQuery, list)
-                    SearchType.ByInstruction -> filterByInstructions(searchQuery, list)
-                } else list
-        }
-
-
-    //здесь (вместе с интерфейсом, ага) должно происходиь все преобразование.
-    //и обращаться к нему нужно из вьюмодели
-    //а тут (внутри юзкейса) должно идти обращеие к репозиторию
-
-    //а еще  надо в этот пакет бы перенеси ui-модели
 }
