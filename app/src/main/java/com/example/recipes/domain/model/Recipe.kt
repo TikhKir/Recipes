@@ -1,4 +1,4 @@
-package com.example.recipes.repository.model
+package com.example.recipes.domain.model
 
 data class Recipe(
     val uuid: String,

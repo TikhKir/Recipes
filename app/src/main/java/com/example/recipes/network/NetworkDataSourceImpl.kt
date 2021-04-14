@@ -3,14 +3,11 @@ package com.example.recipes.network
 import com.example.recipes.network.model.RawSimilarItem
 import com.example.recipes.network.model.RecipeSingleResponse
 import com.example.recipes.network.model.RecipesListResponse
-import com.example.recipes.repository.model.Recipe
-import com.example.recipes.repository.model.SimilarRecipe
-import com.example.recipes.utils.BASE_RECIPE_URL
-import com.example.recipes.utils.datawrappers.Result
+import com.example.recipes.domain.model.Recipe
+import com.example.recipes.domain.model.SimilarRecipe
+import com.example.recipes.utils.datatype.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 class NetworkDataSourceImpl @Inject constructor(

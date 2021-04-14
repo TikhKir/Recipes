@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.recipes.local.converters.ImageConverter
 import com.example.recipes.local.converters.SimilarRecipeConverter
-import com.example.recipes.repository.model.SimilarRecipe
+import com.example.recipes.domain.model.SimilarRecipe
 
 @Entity(
     tableName = "recipes",

@@ -1,7 +1,7 @@
 package com.example.recipes.local.converters
 
 import androidx.room.TypeConverter
-import com.example.recipes.repository.model.SimilarRecipe
+import com.example.recipes.domain.model.SimilarRecipe
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type

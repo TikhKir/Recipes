@@ -1,7 +1,7 @@
 package com.example.recipes.network
 
-import com.example.recipes.repository.model.Recipe
-import com.example.recipes.utils.datawrappers.Result
+import com.example.recipes.domain.model.Recipe
+import com.example.recipes.utils.datatype.Result
 
 interface NetworkDataSource {
 

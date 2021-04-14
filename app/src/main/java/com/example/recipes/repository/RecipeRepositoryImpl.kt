@@ -2,8 +2,8 @@ package com.example.recipes.repository
 
 import com.example.recipes.local.LocalDataSource
 import com.example.recipes.network.NetworkDataSource
-import com.example.recipes.repository.model.Recipe
-import com.example.recipes.utils.datawrappers.Result
+import com.example.recipes.domain.model.Recipe
+import com.example.recipes.utils.datatype.Result
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(

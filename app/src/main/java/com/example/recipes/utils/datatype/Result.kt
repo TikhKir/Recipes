@@ -1,4 +1,4 @@
-package com.example.recipes.utils.datawrappers
+package com.example.recipes.utils.datatype
 
 import java.lang.Exception
 

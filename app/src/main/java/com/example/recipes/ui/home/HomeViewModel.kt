@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipes.repository.RecipeRepository
-import com.example.recipes.repository.model.Recipe
+import com.example.recipes.domain.GetRecipesUseCase
+import com.example.recipes.domain.model.Recipe
+import com.example.recipes.utils.filterparameters.SearchType
+import com.example.recipes.utils.filterparameters.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,12 +15,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repo: RecipeRepository
+    private val getRecipesUseCase: GetRecipesUseCase
 ) : ViewModel() {
-
     companion object {
         private const val TAG = "HOME_VIEW_MODEL"
     }
+
+
+
+    private val searchType = MutableLiveData<SearchType>(SearchType.ByName)
+    private val sortType = MutableLiveData<SortType>(SortType.Missing)
 
     private val recipesMutable = MutableLiveData<List<Recipe>>()
     val recipesLiveData get() = recipesMutable
@@ -31,7 +37,7 @@ class HomeViewModel @Inject constructor(
 
 
     private fun getRecipes() = viewModelScope.launch(Dispatchers.IO) {
-        repo.getRecipes()
+        getRecipesUseCase.execute("goat", SearchType.ByName, SortType.Missing)
             .onSuccess {
                 it.map { Log.e(TAG, it.name) }
             }.onError {
