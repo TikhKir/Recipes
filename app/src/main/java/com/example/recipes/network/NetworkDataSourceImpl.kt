@@ -1,11 +1,11 @@
 package com.example.recipes.network
 
+import com.example.recipes.domain.model.Recipe
+import com.example.recipes.domain.model.SimilarRecipe
 import com.example.recipes.network.model.RawSimilarItem
 import com.example.recipes.network.model.RecipeSingleResponse
 import com.example.recipes.network.model.RecipesListResponse
-import com.example.recipes.domain.model.Recipe
-import com.example.recipes.domain.model.SimilarRecipe
-import com.example.recipes.utils.datatype.Result
+import com.example.recipes.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

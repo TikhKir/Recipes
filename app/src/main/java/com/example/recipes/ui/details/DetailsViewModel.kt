@@ -25,15 +25,15 @@ class DetailsViewModel @Inject constructor(
     private val detailedRecipe = MutableLiveData<Recipe>()
     val detailedRecipeLD: LiveData<Recipe> get() = detailedRecipe
 
-    private val state = MutableLiveData<State>(State.Default)
+    private val state = MutableLiveData<State>(State.Default())
     val stateLD: LiveData<State> get() = state
 
     fun getRecipe(uuid: String) = viewModelScope.launch(Dispatchers.IO) {
-        state.postValue(State.Loading)
+        state.postValue(State.Loading())
         repo.getRecipeByUUID(uuid)
             .onSuccess {
                 detailedRecipe.postValue(it)
-                state.postValue(State.Success)
+                state.postValue(State.Success())
                 Log.e(TAG, it.name )
             }.onError {
                 state.postValue(State.Error(it.message.toString()))

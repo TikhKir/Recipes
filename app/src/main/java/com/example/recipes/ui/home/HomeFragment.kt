@@ -1,38 +1,47 @@
 package com.example.recipes.ui.home
 
 import android.annotation.SuppressLint
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
 import com.example.recipes.databinding.HomeFragmentBinding
 import com.example.recipes.ui.details.DetailsFragment
+import com.example.recipes.utils.State
 import com.example.recipes.utils.hideKeyboard
+import com.example.recipes.utils.searchWatcherFlow
+import com.example.recipes.utils.setFirstSkipWatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     companion object {
         fun newInstance() = HomeFragment()
+        private const val SEARCH_VIEW_DEBOUNCE = 500L
+        private const val SEARCH_VIEW_QUERY_KEY = "SEARCH_VIEW_QUERY_KEY"
     }
 
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
 
-
     private lateinit var viewModel: HomeViewModel
-    private val recyclerAdapter = RecipeHomeAdapter(this)
     private lateinit var searchView: SearchView
+    private val recyclerAdapter = RecipeHomeAdapter(this)
+    private var searchQuery: CharSequence? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,9 +54,12 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null)
+            searchQuery = savedInstanceState.getCharSequence(SEARCH_VIEW_QUERY_KEY)
 
         setupSearchTypeSpinner()
         setupSortTypeSpinner()
+        setupRetryButton()
         setupRecycler()
         setupViewModel()
     }
@@ -57,6 +69,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         viewModel.recipesLD.observe(viewLifecycleOwner, { recyclerAdapter.submitList(it) })
+        viewModel.stateLD.observe(viewLifecycleOwner, { updateLoadingState(it) })
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -79,16 +92,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSearchOver.adapter = it
         }
-
-        binding.spnSearchOver.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            var skipFirst = 0
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
-                if (view != null) skipFirst++
-                if (skipFirst > 1) viewModel.setSearchSpinnerState(position)
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-        }
+        binding.spnSearchOver.setFirstSkipWatcher { viewModel.setSearchSpinnerState(it) }
     }
 
     private fun setupSortTypeSpinner() {
@@ -100,28 +104,54 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSort.adapter = it
         }
-        binding.spnSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            var skipFirst = 0
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
-                if (view != null) skipFirst++
-                if (skipFirst > 1) viewModel.setSortSpinnerState(position)
-            }
+        binding.spnSort.setFirstSkipWatcher { viewModel.setSortSpinnerState(it) }
+    }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu, menu)
+        searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.queryHint = getString(R.string.query_hint)
+        searchQuery?.let { searchView.setQuery(searchQuery, false) }
+        launchFlowSearchView()
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    private fun launchFlowSearchView() {
+        lifecycleScope.launchWhenResumed {
+            searchView.searchWatcherFlow()
+                .debounce(SEARCH_VIEW_DEBOUNCE)
+                .buffer(Channel.CONFLATED)
+                .collect { viewModel.setSearchQuery(it) }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-
-        val searchManager =
-            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-        searchView.maxWidth = Int.MAX_VALUE
-
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun updateLoadingState(state: State) = when (state) {
+        is State.Default -> setLoading(false)
+        is State.Loading -> setLoading(true)
+        is State.Error -> showErrorMessage(state.errorMessage)
+        is State.Success -> setLoading(false)
     }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.pbHome.isVisible = isLoading
+        binding.tvHomeErrorMessage.isVisible = false
+        binding.btnHomeErrorRetry.isVisible = false
+    }
+
+    private fun showErrorMessage(message: String) {
+        binding.pbHome.isVisible = false
+        binding.btnHomeErrorRetry.isVisible = true
+        binding.tvHomeErrorMessage.isVisible = true
+        binding.tvHomeErrorMessage.text = message
+    }
+
+    private fun setupRetryButton() {
+        binding.btnHomeErrorRetry.setOnClickListener { viewModel.getRecipes() }
+    }
+
 
     override fun onRecipeItemClick(uuid: String) {
         parentFragmentManager.beginTransaction()
@@ -130,11 +160,16 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             .commit()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        searchQuery = searchView.query
+        outState.putCharSequence(SEARCH_VIEW_QUERY_KEY, searchQuery)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 
 
 }

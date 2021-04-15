@@ -1,8 +1,8 @@
 package com.example.recipes.local
 
-import com.example.recipes.local.model.RecipeDB
 import com.example.recipes.domain.model.Recipe
-import com.example.recipes.utils.datatype.Result
+import com.example.recipes.local.model.RecipeDB
+import com.example.recipes.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

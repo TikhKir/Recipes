@@ -1,7 +1,7 @@
 package com.example.recipes.repository
 
 import com.example.recipes.domain.model.Recipe
-import com.example.recipes.utils.datatype.Result
+import com.example.recipes.utils.Result
 
 interface RecipeRepository {
 

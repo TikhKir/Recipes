@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <!--    <ScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,8 +31,42 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:entries="@array/sorting_type" />
 
+        <ProgressBar
+            android:id="@+id/pb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_home_error_message"
+            style="@style/RecipeStyle.Text.Secondary"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/something_went_wrong"
+            android:gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_home_error_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/retry"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_error_message" />
 
         <androidx.recyclerview.widget.RecyclerView
+            tools:visibility="invisible"
             android:id="@+id/rv_home"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -51,7 +82,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!--    </ScrollView>-->
 
 
 </FrameLayout>

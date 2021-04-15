@@ -1,6 +1,4 @@
-package com.example.recipes.utils.datatype
-
-import java.lang.Exception
+package com.example.recipes.utils
 
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
