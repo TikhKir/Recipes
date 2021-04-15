@@ -10,20 +10,5 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/action_search_over"
-        android:icon="@drawable/ic_search"
-        android:orderInCategory="100"
-        android:title="@string/search_over"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_order"
-        android:icon="@drawable/ic_sort"
-        android:orderInCategory="100"
-        android:title="@string/search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom"/>
 
 </menu>

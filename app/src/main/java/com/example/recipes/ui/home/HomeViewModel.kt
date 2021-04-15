@@ -36,8 +36,7 @@ class HomeViewModel @Inject constructor(
     val stateLD: LiveData<State> get() = state
 
     init {
-        //getRecipes()
-        //getRecipeByUUID("fc988768-c1e9-11e6-a4a6-cec0c932ce01")
+        getRecipes()
     }
 
     fun setSearchSpinnerState(position: Int) {

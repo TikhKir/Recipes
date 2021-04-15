@@ -18,4 +18,5 @@
     <string name="photo_of_recipe">Photo of recipe</string>
     <string name="search">Search</string>
     <string name="search_over">Search over</string>
+    <string name="empty_recipe_uuid">Empty recipe info</string>
 </resources>

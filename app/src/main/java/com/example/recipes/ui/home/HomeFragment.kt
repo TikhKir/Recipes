@@ -1,33 +1,43 @@
 package com.example.recipes.ui.home
 
-import androidx.lifecycle.ViewModelProvider
+import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
 import com.example.recipes.databinding.HomeFragmentBinding
+import com.example.recipes.ui.details.DetailsFragment
+import com.example.recipes.utils.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
-
-    private var _binding: HomeFragmentBinding? = null
-    private val binding get() = _binding!!
-
+class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
+    private var _binding: HomeFragmentBinding? = null
+    private val binding get() = _binding!!
+
+
     private lateinit var viewModel: HomeViewModel
+    private val recyclerAdapter = RecipeHomeAdapter(this)
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         _binding = HomeFragmentBinding.inflate(LayoutInflater.from(context), container, false)
         return binding.root
     }
@@ -38,16 +48,26 @@ class HomeFragment : Fragment() {
 
         setupSearchTypeSpinner()
         setupSortTypeSpinner()
+        setupRecycler()
         setupViewModel()
     }
 
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        viewModel.recipesLD.observe(viewLifecycleOwner, { recyclerAdapter.submitList(it) })
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupRecycler() {
-        
+        binding.rvHome.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvHome.adapter = recyclerAdapter
+
+        binding.rvHome.setOnTouchListener { _, _ ->
+            hideKeyboard(requireActivity())
+        }
     }
 
     private fun setupSearchTypeSpinner() {
@@ -91,10 +111,30 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu, menu)
+
+        val searchManager =
+            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        searchView.maxWidth = Int.MAX_VALUE
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onRecipeItemClick(uuid: String) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, DetailsFragment.newInstance(uuid))
+            .addToBackStack(null)
+            .commit()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
+
 
 }
