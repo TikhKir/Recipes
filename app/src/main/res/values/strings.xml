@@ -1,17 +1,17 @@
 <resources>
 
     <string-array name="searching_type">
-        <item>by name</item>
-        <item>by description</item>
-        <item>by instruction</item>
+        <item>search by name</item>
+        <item>search by description</item>
+        <item>search by instruction</item>
     </string-array>
 
     <string-array name="sorting_type">
         <item>unsorted</item>
-        <item>by name (A-Z)</item>
-        <item>by name (Z-A)</item>
-        <item>by update (A-Z)</item>
-        <item>by update (Z-A)</item>
+        <item>sort by name (A-Z)</item>
+        <item>sort by name (Z-A)</item>
+        <item>sort by update (A-Z)</item>
+        <item>sort by update (Z-A)</item>
     </string-array>
 
     <string name="app_name">Recipes</string>

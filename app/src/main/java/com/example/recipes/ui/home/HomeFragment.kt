@@ -16,7 +16,7 @@ import com.example.recipes.ui.details.DetailsFragment
 import com.example.recipes.utils.State
 import com.example.recipes.utils.hideKeyboard
 import com.example.recipes.utils.searchWatcherFlow
-import com.example.recipes.utils.setFirstSkipWatcher
+import com.example.recipes.utils.setFirstSelectSkipWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -30,7 +30,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     companion object {
         fun newInstance() = HomeFragment()
-        private const val SEARCH_VIEW_DEBOUNCE = 500L
+        private const val SEARCH_VIEW_DEBOUNCE = 300L
         private const val SEARCH_VIEW_QUERY_KEY = "SEARCH_VIEW_QUERY_KEY"
     }
 
@@ -68,8 +68,10 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        viewModel.recipesLD.observe(viewLifecycleOwner, { recyclerAdapter.submitList(it) })
         viewModel.stateLD.observe(viewLifecycleOwner, { updateLoadingState(it) })
+        viewModel.recipesLD.observe(viewLifecycleOwner, {
+            recyclerAdapter.submitList(it) { binding.rvHome.scrollToPosition(0) }
+        })
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -92,7 +94,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSearchOver.adapter = it
         }
-        binding.spnSearchOver.setFirstSkipWatcher { viewModel.setSearchSpinnerState(it) }
+        binding.spnSearchOver.setFirstSelectSkipWatcher { viewModel.setSearchSpinnerState(it) }
     }
 
     private fun setupSortTypeSpinner() {
@@ -104,7 +106,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSort.adapter = it
         }
-        binding.spnSort.setFirstSkipWatcher { viewModel.setSortSpinnerState(it) }
+        binding.spnSort.setFirstSelectSkipWatcher { viewModel.setSortSpinnerState(it) }
     }
 
     @FlowPreview
@@ -160,9 +162,13 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             .commit()
     }
 
+    override fun onPause() {
+        super.onPause()
+        searchQuery = searchView.query
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        searchQuery = searchView.query
         outState.putCharSequence(SEARCH_VIEW_QUERY_KEY, searchQuery)
     }
 

@@ -35,20 +35,14 @@ class RecipesHandleUseCase {
                 SortType.ByLastUpdateDesc -> this.sortedByDescending { it.lastUpdated }
             }
 
-        private suspend fun filterByName(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
-            recipes.filter { it.name.capitalize().contains(searchQuery.capitalize()) }
+        private fun filterByName(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
+            recipes.filter { it.name.contains(searchQuery, ignoreCase = true) }
 
-        private suspend fun filterByDescription(
-            searchQuery: String,
-            recipes: List<Recipe>
-        ): List<Recipe> =
-            recipes.filter { it.description.capitalize().contains(searchQuery.capitalize()) }
+        private fun filterByDescription(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
+            recipes.filter { it.description.contains(searchQuery, ignoreCase = true) }
 
-        private suspend fun filterByInstructions(
-            searchQuery: String,
-            recipes: List<Recipe>
-        ): List<Recipe> =
-            recipes.filter { it.instructions.capitalize().contains(searchQuery.capitalize()) }
+        private fun filterByInstructions(searchQuery: String, recipes: List<Recipe>): List<Recipe> =
+            recipes.filter { it.instructions.contains(searchQuery, ignoreCase = true) }
 
     }
 }

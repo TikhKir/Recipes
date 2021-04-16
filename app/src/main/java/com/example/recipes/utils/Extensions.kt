@@ -25,15 +25,23 @@ fun SearchView.searchWatcherFlow(): Flow<String> = callbackFlow {
     awaitClose()
 }
 
-fun Spinner.setFirstSkipWatcher(execute: (position: Int) -> Unit) {
+fun Spinner.setFirstSelectSkipWatcher(execute: (position: Int) -> Unit) {
     val listener = object : AdapterView.OnItemSelectedListener {
-        var skipFirst = 0
+        val defPosition = 0
+        var previousIsNull = -1
+        var notSkip = false
         override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
-            if (view != null) skipFirst++
-            if (skipFirst > 1) execute(position)
+            if (notSkip) execute(position)
+            else {
+                if ((view != null && position == defPosition) ||
+                    (view == null && position == defPosition) ||
+                    (view != null && previousIsNull == 1 && position != defPosition)
+                ) notSkip = true
+            }
+            previousIsNull = if (view == null) 1 else 0
         }
-
         override fun onNothingSelected(p0: AdapterView<*>?) {}
     }
     onItemSelectedListener = listener
 }
+
