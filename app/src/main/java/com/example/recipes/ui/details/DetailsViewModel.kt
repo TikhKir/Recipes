@@ -34,7 +34,6 @@ class DetailsViewModel @Inject constructor(
             .onSuccess {
                 detailedRecipe.postValue(it)
                 state.postValue(State.Success())
-                Log.e(TAG, it.name )
             }.onError {
                 state.postValue(State.Error(it.message.toString()))
                 Log.e(TAG, it.printStackTrace().toString())

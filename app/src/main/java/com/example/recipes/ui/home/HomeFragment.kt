@@ -46,14 +46,18 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
         _binding = HomeFragmentBinding.inflate(LayoutInflater.from(context), container, false)
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null)
             searchQuery = savedInstanceState.getCharSequence(SEARCH_VIEW_QUERY_KEY)
 
@@ -61,13 +65,11 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         setupSortTypeSpinner()
         setupRetryButton()
         setupRecycler()
-        setupViewModel()
+        observeViewModel()
     }
 
 
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
+    private fun observeViewModel() {
         viewModel.stateLD.observe(viewLifecycleOwner, { updateLoadingState(it) })
         viewModel.recipesLD.observe(viewLifecycleOwner, {
             recyclerAdapter.submitList(it) { binding.rvHome.scrollToPosition(0) }

@@ -22,4 +22,5 @@
     <string name="query_hint">Search (2 symbols min)</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="retry">Retry</string>
+    <string name="cooking_instructions">Cooking instructions:</string>
 </resources>
