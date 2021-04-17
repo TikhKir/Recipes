@@ -10,16 +10,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.ui.details.slider.SliderAdapter
 import com.example.recipes.ui.details.slider.SliderPageTransformer
+import com.example.recipes.ui.picture.PictureFragment
 import com.example.recipes.utils.State
 import com.example.recipes.utils.convertHtml
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
 
     companion object {
         private const val EXTRA_UUID = "EXTRA_UUID"
@@ -34,14 +36,13 @@ class DetailsFragment : Fragment() {
 
     private lateinit var uuidArg: String
     private lateinit var viewModel: DetailsViewModel
-    private val sliderAdapter = SliderAdapter()
+    private val sliderAdapter = SliderAdapter(this)
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initArgs()
         _binding = DetailsFragmentBinding.inflate(LayoutInflater.from(context), container, false)
         return binding.root
     }
@@ -49,12 +50,12 @@ class DetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
+        initArgs()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState == null) viewModel.getRecipe(uuidArg)
-        requireActivity().actionBar?.hide()
 
         observeViewModel()
         setupImageSlider()
@@ -74,8 +75,23 @@ class DetailsFragment : Fragment() {
 
     private fun updateRecipeInfo(recipe: Recipe) {
         binding.tvDetailRecipeTitle.text = recipe.name
-        binding.tvDetailRecipeDescription.text = recipe.description
-        binding.tvDetailRecipeInstructions.text = convertHtml(recipe.instructions)
+
+        if (recipe.description.isEmpty()) {
+            binding.tvDetailRecipeDescription.isVisible = false
+        } else {
+            binding.tvDetailRecipeDescription.text = recipe.description
+            binding.tvDetailRecipeDescription.isVisible = true
+        }
+
+        if (convertHtml(recipe.instructions).isEmpty()) {
+            binding.tvDetailRecipeInstructions.isVisible = false
+            binding.tvDetailInstructionsLabel.isVisible = false
+        } else {
+            binding.tvDetailRecipeInstructions.text = convertHtml(recipe.instructions)
+            binding.tvDetailRecipeInstructions.isVisible = true
+            binding.tvDetailInstructionsLabel.isVisible = true
+        }
+
     }
 
     private fun setupImageSlider() {
@@ -122,6 +138,12 @@ class DetailsFragment : Fragment() {
         uuidArg = arguments?.getString(EXTRA_UUID)!!
     }
 
+    override fun onImageClick(imageUrl: String) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, PictureFragment.newInstance(imageUrl))
+            .addToBackStack(null)
+            .commit()
+    }
 
     override fun onDestroy() {
         super.onDestroy()

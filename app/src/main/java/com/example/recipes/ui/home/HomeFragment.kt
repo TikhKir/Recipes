@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -57,7 +58,9 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (activity as AppCompatActivity).setSupportActionBar(binding.tbHome)
         super.onViewCreated(view, savedInstanceState)
+
         if (savedInstanceState != null)
             searchQuery = savedInstanceState.getCharSequence(SEARCH_VIEW_QUERY_KEY)
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:cardCornerRadius="5dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -23,19 +23,16 @@
             android:id="@+id/cv_image_counter"
             app:cardBackgroundColor="@color/design_default_color_background"
             android:layout_width="wrap_content"
-            app:cardCornerRadius="15dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_gravity="bottom|center_horizontal"
+            app:cardCornerRadius="15dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/tv_image_counter"
                 style="@style/RecipeStyle.Text.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="clip_horizontal"
                 android:layout_marginHorizontal="10dp"
                 android:gravity="center"
                 android:maxLines="1"
@@ -46,7 +43,7 @@
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 
 </androidx.cardview.widget.CardView>

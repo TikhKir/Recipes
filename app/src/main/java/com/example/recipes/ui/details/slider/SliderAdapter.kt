@@ -11,7 +11,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.recipes.databinding.ItemViewPagerBinding
 
-class SliderAdapter : ListAdapter<String, RecyclerView.ViewHolder>(StringDiffUtil()) {
+class SliderAdapter(
+    private val imageClickListener: OnImageClickListener
+) : ListAdapter<String, RecyclerView.ViewHolder>(StringDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val bindingView = ItemViewPagerBinding
@@ -35,6 +37,7 @@ class SliderAdapter : ListAdapter<String, RecyclerView.ViewHolder>(StringDiffUti
                 .into(binding.ivPagerImage)
             val countStr = "${position+1}/$itemCount"
             binding.tvImageCounter.text = countStr
+            binding.root.setOnClickListener { imageClickListener.onImageClick(imageUrl) }
         }
     }
 
@@ -49,5 +52,8 @@ class SliderAdapter : ListAdapter<String, RecyclerView.ViewHolder>(StringDiffUti
         }
     }
 
+    interface OnImageClickListener {
+        fun onImageClick(imageUrl: String)
+    }
 
 }

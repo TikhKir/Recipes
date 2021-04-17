@@ -53,13 +53,12 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    private fun handleRecipes() {
-        viewModelScope.launch {
-            recipesMutable.postValue(
-                RecipesHandleUseCase.execute(rawRecipes, searchQuery, searchType, sortType)
-            )
-        }
+    private fun handleRecipes() = viewModelScope.launch {
+        recipesMutable.postValue(
+            RecipesHandleUseCase.execute(rawRecipes, searchQuery, searchType, sortType)
+        )
     }
+
 
     fun setSearchSpinnerState(position: Int) {
         searchType = when (position) {
