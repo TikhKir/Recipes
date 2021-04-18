@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.recipes.databinding.ItemViewPagerBinding
+import com.example.recipes.utils.loadImage
 
 class SliderAdapter(
     private val imageClickListener: OnImageClickListener
@@ -31,10 +32,7 @@ class SliderAdapter(
     inner class StringViewHolder(private val binding: ItemViewPagerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(imageUrl: String, position: Int) {
-            Glide.with(binding.root)
-                .load(imageUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.ivPagerImage)
+            binding.ivPagerImage.loadImage(imageUrl)
             val countStr = "${position+1}/$itemCount"
             binding.tvImageCounter.text = countStr
             binding.root.setOnClickListener { imageClickListener.onImageClick(imageUrl) }

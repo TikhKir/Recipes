@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
 import com.example.recipes.domain.model.Recipe
+import com.example.recipes.domain.model.SimilarRecipe
 import com.example.recipes.ui.details.slider.SliderAdapter
 import com.example.recipes.ui.details.slider.SliderPageTransformer
 import com.example.recipes.ui.picture.PictureFragment
@@ -21,7 +23,8 @@ import com.example.recipes.utils.convertHtml
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
+class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
+    SimilarAdapter.OnItemClickListener {
 
     companion object {
         private const val EXTRA_UUID = "EXTRA_UUID"
@@ -37,6 +40,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
     private lateinit var uuidArg: String
     private lateinit var viewModel: DetailsViewModel
     private val sliderAdapter = SliderAdapter(this)
+    private val similarAdapter = SimilarAdapter(this)
 
 
     override fun onCreateView(
@@ -59,8 +63,14 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
         observeViewModel()
         setupImageSlider()
         setupRetryButton()
+        setupRecycler()
     }
 
+    private fun setupRecycler() {
+        binding.rvDetailsSimilar.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvDetailsSimilar.adapter = similarAdapter
+    }
 
     private fun observeViewModel() {
         viewModel.stateLD.observe(viewLifecycleOwner, {
@@ -69,11 +79,19 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
         })
         viewModel.detailedRecipeLD.observe(viewLifecycleOwner, {
             sliderAdapter.submitList(it.images)
+            updateSimilar(it.similar)
             updateRecipeInfo(it)
         }
         )
     }
 
+    private fun updateSimilar(similar: List<SimilarRecipe>) {
+        if (similar.isNotEmpty()) {
+            similarAdapter.submitList(similar)
+            binding.rvDetailsSimilar.isVisible = true
+            binding.tvDetailsSimilarLabel.isVisible = true
+        }
+    }
 
     private fun updateRecipeInfo(recipe: Recipe) {
         binding.tvDetailRecipeTitle.text = recipe.name
@@ -93,7 +111,6 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
             binding.tvDetailRecipeInstructions.isVisible = true
             binding.tvDetailInstructionsLabel.isVisible = true
         }
-
     }
 
     private fun setupImageSlider() {
@@ -147,9 +164,14 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
             .commit()
     }
 
+    override fun onSimilarItemClick(uuid: String) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, DetailsFragment.newInstance(uuid))
+            .commit()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 }

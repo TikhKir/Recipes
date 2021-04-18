@@ -38,7 +38,7 @@ class ImageSaver @Inject constructor(private val context: Context) {
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                     put(
                         MediaStore.MediaColumns.RELATIVE_PATH,
-                        Environment.DIRECTORY_DOWNLOADS + File.separator + directoryName
+                        Environment.DIRECTORY_PICTURES + File.separator + directoryName
                     )
                 }
 

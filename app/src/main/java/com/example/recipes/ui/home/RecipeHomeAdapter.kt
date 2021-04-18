@@ -1,15 +1,13 @@
 package com.example.recipes.ui.home
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.recipes.databinding.ItemHomeRecipeBinding
 import com.example.recipes.domain.model.Recipe
+import com.example.recipes.utils.loadImage
 
 class RecipeHomeAdapter(
     private val itemClickListener: OnItemClickListener
@@ -32,10 +30,7 @@ class RecipeHomeAdapter(
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.name
             binding.tvRecipeDescription.text = recipe.description
-            Glide.with(binding.root)
-                .load(recipe.images.firstOrNull())
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.ivRecipeItemImage)
+            binding.ivRecipeItemImage.loadImage(recipe.images.firstOrNull())
             binding.root.setOnClickListener { itemClickListener.onRecipeItemClick(recipe.uuid) }
         }
     }

@@ -2,8 +2,12 @@ package com.example.recipes.utils
 
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.widget.SearchView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -42,5 +46,18 @@ fun Spinner.setFakeSelectSkipWatcher(execute: (position: Int) -> Unit, defPositi
         override fun onNothingSelected(p0: AdapterView<*>?) {}
     }
     onItemSelectedListener = listener
+}
+
+fun ImageView.loadImage(imageUri: String?) {
+    val circularProgressDrawable = CircularProgressDrawable(context)
+    circularProgressDrawable.strokeWidth = 3f
+    circularProgressDrawable.centerRadius = 15f
+    circularProgressDrawable.start()
+
+    Glide.with(context)
+        .load(imageUri)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .placeholder(circularProgressDrawable)
+        .into(this)
 }
 
