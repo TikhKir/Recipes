@@ -28,4 +28,5 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="save">Save</string>
     <string name="image_is_not_loaded">Image is not loaded</string>
+    <string name="request_storage_dialog">This app require access to storage to save images</string>
 </resources>

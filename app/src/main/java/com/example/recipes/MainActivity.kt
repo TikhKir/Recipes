@@ -1,14 +1,10 @@
 package com.example.recipes
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.example.recipes.ui.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,8 +13,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        requestPermissions()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -53,38 +47,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun hasWriteExternalStoragePermission() =
-        ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-
-    private fun requestPermissions() {
-        val permissionsToRequest = mutableListOf<String>()
-        if (!hasWriteExternalStoragePermission()) {
-            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-
-        if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 0)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 0 && grantResults.isNotEmpty()) {
-            for (grantResult in grantResults) {
-                if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("TAG", grantResult.toString())
-                }
-            }
-        }
-    }
 
 
 

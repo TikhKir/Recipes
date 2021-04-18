@@ -2,7 +2,9 @@ package com.example.recipes.utils
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -25,19 +27,18 @@ class ImageSaver @Inject constructor(private val context: Context) {
 
 
     fun save(bitmap: Bitmap) = saverScope.launch(Dispatchers.IO) {
-
         val outputStream: OutputStream?
+        val fileName = System.currentTimeMillis()
 
         try {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val resolver = context.contentResolver
                 val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, "Recipe" + ".jpg")
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                     put(
                         MediaStore.MediaColumns.RELATIVE_PATH,
-                        Environment.DIRECTORY_PICTURES + File.separator + directoryName
+                        Environment.DIRECTORY_DOWNLOADS + File.separator + directoryName
                     )
                 }
 
@@ -46,10 +47,10 @@ class ImageSaver @Inject constructor(private val context: Context) {
 
                 outputStream = imageUri?.let { resolver.openOutputStream(it) }
             } else {
-                val directory =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                val imageFile = File(directory.absolutePath, "Recipe" + ".jpg")
+                val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val imageFile = File(directory.absolutePath, "$fileName.jpg")
                 outputStream = FileOutputStream(imageFile)
+                startMediaScan(Uri.fromFile(imageFile))
             }
 
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -65,6 +66,12 @@ class ImageSaver @Inject constructor(private val context: Context) {
 
     private suspend fun showResult(message: String) = withContext(Dispatchers.Main) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startMediaScan(imagePath: Uri) {
+        val scanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        scanIntent.data = imagePath
+        context.sendBroadcast(scanIntent)
     }
 
 }
