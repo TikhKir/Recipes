@@ -17,7 +17,7 @@ import com.example.recipes.ui.details.DetailsFragment
 import com.example.recipes.utils.State
 import com.example.recipes.utils.hideKeyboard
 import com.example.recipes.utils.searchWatcherFlow
-import com.example.recipes.utils.setFirstSelectSkipWatcher
+import com.example.recipes.utils.setFakeSelectSkipWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -99,7 +99,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSearchOver.adapter = it
         }
-        binding.spnSearchOver.setFirstSelectSkipWatcher { viewModel.setSearchSpinnerState(it) }
+        binding.spnSearchOver.setFakeSelectSkipWatcher({viewModel.setSearchSpinnerState(it)})
     }
 
     private fun setupSortTypeSpinner() {
@@ -111,7 +111,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spnSort.adapter = it
         }
-        binding.spnSort.setFirstSelectSkipWatcher { viewModel.setSortSpinnerState(it) }
+        binding.spnSort.setFakeSelectSkipWatcher({ viewModel.setSortSpinnerState(it) })
     }
 
     @FlowPreview
@@ -167,8 +167,8 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             .commit()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         searchQuery = searchView.query
     }
 

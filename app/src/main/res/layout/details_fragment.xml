@@ -8,16 +8,17 @@
 
     <ScrollView
         android:id="@+id/sv_detail_content"
-        android:visibility="invisible"
-        tools:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="32dp"
+            android:paddingBottom="16dp">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_image_slide"
@@ -30,12 +31,12 @@
 
             <TextView
                 android:id="@+id/tv_detail_recipe_title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vp_image_slide"

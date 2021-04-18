@@ -25,9 +25,8 @@ fun SearchView.searchWatcherFlow(): Flow<String> = callbackFlow {
     awaitClose()
 }
 
-fun Spinner.setFirstSelectSkipWatcher(execute: (position: Int) -> Unit) {
+fun Spinner.setFakeSelectSkipWatcher(execute: (position: Int) -> Unit, defPosition: Int = 0) {
     val listener = object : AdapterView.OnItemSelectedListener {
-        val defPosition = 0
         var previousIsNull = -1
         var notSkip = false
         override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
