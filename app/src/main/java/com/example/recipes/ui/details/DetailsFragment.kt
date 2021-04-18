@@ -55,7 +55,6 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) viewModel.getRecipe(uuidArg)
 
         observeViewModel()
         setupImageSlider()
@@ -64,7 +63,10 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener {
 
 
     private fun observeViewModel() {
-        viewModel.stateLD.observe(viewLifecycleOwner, { updateLoadingState(it) })
+        viewModel.stateLD.observe(viewLifecycleOwner, {
+            if (it is State.Default) viewModel.getRecipe(uuidArg)
+            updateLoadingState(it)
+        })
         viewModel.detailedRecipeLD.observe(viewLifecycleOwner, {
             sliderAdapter.submitList(it.images)
             updateRecipeInfo(it)

@@ -21,7 +21,6 @@ class DetailsViewModel @Inject constructor(
         private const val TAG = "DETAILS_VIEW_MODEL"
     }
 
-
     private val detailedRecipe = MutableLiveData<Recipe>()
     val detailedRecipeLD: LiveData<Recipe> get() = detailedRecipe
 

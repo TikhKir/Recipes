@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipes.domain.RecipesHandleUseCase
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.repository.RecipeRepository
+import com.example.recipes.utils.SEARCH_MIN_QUERY
 import com.example.recipes.utils.State
 import com.example.recipes.utils.filterparameters.SearchType
 import com.example.recipes.utils.filterparameters.SortType
@@ -81,7 +82,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setSearchQuery(query: String) {
-        searchQuery = if (query.length > 1) query else null
+        searchQuery = if (query.length >= SEARCH_MIN_QUERY) query else null
         handleRecipes()
     }
 

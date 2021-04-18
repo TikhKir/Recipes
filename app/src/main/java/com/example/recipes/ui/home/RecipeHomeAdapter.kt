@@ -32,7 +32,7 @@ class RecipeHomeAdapter(
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.name
             binding.tvRecipeDescription.text = recipe.description
-            Glide.with(binding.root) //todo: set loading placeholder
+            Glide.with(binding.root)
                 .load(recipe.images.firstOrNull())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.ivRecipeItemImage)
