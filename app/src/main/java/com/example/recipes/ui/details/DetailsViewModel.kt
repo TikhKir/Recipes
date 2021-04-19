@@ -35,7 +35,7 @@ class DetailsViewModel @Inject constructor(
                 state.postValue(State.Success())
             }.onError {
                 state.postValue(State.Error(it.message.toString()))
-                Log.e(TAG, it.printStackTrace().toString())
+                Log.e(TAG, it.message.toString())
             }
     }
 }

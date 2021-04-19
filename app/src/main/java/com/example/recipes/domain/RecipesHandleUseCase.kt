@@ -3,6 +3,8 @@ package com.example.recipes.domain
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.utils.filterparameters.SearchType
 import com.example.recipes.utils.filterparameters.SortType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RecipesHandleUseCase {
     companion object {
@@ -12,12 +14,14 @@ class RecipesHandleUseCase {
             searchQuery: String?,
             searchType: SearchType,
             sortType: SortType
-        ): List<Recipe> = recipeList
-            .strictSearch(searchQuery, searchType)
-            .sortByParameters(sortType)
+        ): List<Recipe> = withContext(Dispatchers.Default) {
+            recipeList
+                .strictSearch(searchQuery, searchType)
+                .sortByParameters(sortType)
+        }
 
 
-        private suspend fun List<Recipe>.strictSearch(searchQuery: String?, searchType: SearchType)
+        private fun List<Recipe>.strictSearch(searchQuery: String?, searchType: SearchType)
                 : List<Recipe> =
             if (searchQuery != null)
                 when (searchType) {
@@ -26,7 +30,7 @@ class RecipesHandleUseCase {
                     SearchType.ByInstruction -> filterByInstructions(searchQuery, this)
                 } else this
 
-        private suspend fun List<Recipe>.sortByParameters(sortType: SortType): List<Recipe> =
+        private fun List<Recipe>.sortByParameters(sortType: SortType): List<Recipe> =
             when (sortType) {
                 SortType.Unsorted -> this
                 SortType.ByNameAsc -> this.sortedBy { it.name }

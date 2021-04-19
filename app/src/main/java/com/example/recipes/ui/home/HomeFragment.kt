@@ -73,7 +73,8 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     private fun observeViewModel() {
         viewModel.stateLD.observe(viewLifecycleOwner, { updateLoadingState(it) })
         viewModel.recipesLD.observe(viewLifecycleOwner, {
-            recyclerAdapter.submitList(it) { if (scrollToTopFlag) {
+            recyclerAdapter.submitList(it) {
+                if (scrollToTopFlag) {
                     binding.rvHome.scrollToPosition(0)
                     scrollToTopFlag = false
                 }
@@ -83,12 +84,10 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupRecycler() {
-        binding.rvHome.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.rvHome.adapter = recyclerAdapter
-
-        binding.rvHome.setOnTouchListener { _, _ ->
-            hideKeyboard(requireActivity())
+        binding.rvHome.apply {
+            setOnTouchListener { _, _ -> hideKeyboard(requireActivity()) }
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = recyclerAdapter
         }
     }
 
@@ -153,17 +152,17 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         is State.Success -> setLoading(false)
     }
 
-    private fun setLoading(isLoading: Boolean) {
-        binding.pbHome.isVisible = isLoading
-        binding.tvHomeErrorMessage.isVisible = false
-        binding.btnHomeErrorRetry.isVisible = false
+    private fun setLoading(isLoading: Boolean) = with(binding) {
+        pbHome.isVisible = isLoading
+        tvHomeErrorMessage.isVisible = false
+        btnHomeErrorRetry.isVisible = false
     }
 
-    private fun showErrorMessage(message: String) {
-        binding.pbHome.isVisible = false
-        binding.btnHomeErrorRetry.isVisible = true
-        binding.tvHomeErrorMessage.isVisible = true
-        binding.tvHomeErrorMessage.text = message
+    private fun showErrorMessage(message: String) = with(binding) {
+        pbHome.isVisible = false
+        btnHomeErrorRetry.isVisible = true
+        tvHomeErrorMessage.isVisible = true
+        tvHomeErrorMessage.text = message
     }
 
     private fun setupRetryButton() {
@@ -172,8 +171,9 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
 
     override fun onRecipeItemClick(uuid: String) {
+        hideKeyboard(requireActivity())
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, DetailsFragment.newInstance(uuid))
+            .add(R.id.main_fragment_container, DetailsFragment.newInstance(uuid))
             .addToBackStack(null)
             .commit()
     }

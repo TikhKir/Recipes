@@ -27,10 +27,10 @@ class SimilarAdapter(
     inner class RecipeViewHolder(private val binding: ItemDetailSimilarBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(similar: SimilarRecipe) {
-            binding.tvItemSimilar.text = similar.name
-            binding.ivItemSimilar.loadImage(similar.imageURL)
-            binding.root.setOnClickListener { itemClickListener.onSimilarItemClick(similar.uuid) }
+        fun bind(similar: SimilarRecipe) = with(binding) {
+            tvItemSimilar.text = similar.name
+            ivItemSimilar.loadImage(similar.imageURL)
+            root.setOnClickListener { itemClickListener.onSimilarItemClick(similar.uuid) }
         }
     }
 

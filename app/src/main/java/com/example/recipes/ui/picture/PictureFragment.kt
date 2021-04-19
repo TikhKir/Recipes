@@ -30,7 +30,6 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     companion object {
         private const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
-        private const val EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME"
         private const val VISIBILITY_KEY = "VISIBILITY_KEY"
         fun newInstance(imageUrl: String): PictureFragment {
             val args = Bundle().apply { putString(EXTRA_IMAGE_URL, imageUrl) }
@@ -80,13 +79,13 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         binding.btSave.isVisible = isVisible
     }
 
-    private fun setupViewVisibilityChanger() {
-        binding.flHidden.setOnClickListener {
+    private fun setupViewVisibilityChanger() = with(binding) {
+        flHidden.setOnClickListener {
             if (visibility) {
-                binding.btSave.isVisible = false
+                btSave.isVisible = false
                 visibility = false
             } else {
-                binding.btSave.isVisible = true
+                btSave.isVisible = true
                 visibility = true
             }
         }
