@@ -15,6 +15,8 @@ import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.domain.model.SimilarRecipe
+import com.example.recipes.ui.details.recycler.SimilarAdapter
+import com.example.recipes.ui.details.recycler.SimilarMarginDecorator
 import com.example.recipes.ui.details.slider.SliderAdapter
 import com.example.recipes.ui.details.slider.SliderPageTransformer
 import com.example.recipes.ui.picture.PictureFragment
@@ -69,6 +71,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
 
     private fun setupRecycler() {
         binding.rvDetailsSimilar.apply {
+            addItemDecoration(SimilarMarginDecorator(resources.getDimensionPixelSize(R.dimen.margin_normal)))
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = similarAdapter
         }

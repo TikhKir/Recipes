@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_big">32dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_smallest">5dp</dimen>
+
+    <dimen name="item_similar_width">130dp</dimen>
+    <dimen name="item_similar_height">180dp</dimen>
+    <dimen name="item_home_recipe_height">110dp</dimen>
+    <dimen name="item_pager_counter_corner">10dp</dimen>
+    <dimen name="cover_limiter">1dp</dimen>
+</resources>

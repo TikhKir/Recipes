@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp">
+    tools:layout_marginTop="@dimen/margin_small"
+    android:layout_height="@dimen/item_home_recipe_height"
+    android:layout_marginHorizontal="@dimen/margin_small"
+    app:cardCornerRadius="@dimen/margin_small">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +15,7 @@
 
         <ImageView
             android:id="@+id/iv_recipe_item_image"
-            android:layout_width="110dp"
+            android:layout_width="@dimen/item_home_recipe_height"
             android:layout_height="match_parent"
             android:contentDescription="@string/photo_of_recipe"
             android:scaleType="centerCrop"
@@ -23,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="@dimen/margin_small"
             android:orientation="vertical">
 
             <TextView

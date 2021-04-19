@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
 import com.example.recipes.databinding.HomeFragmentBinding
 import com.example.recipes.ui.details.DetailsFragment
+import com.example.recipes.ui.home.recycler.RecipeHomeAdapter
+import com.example.recipes.ui.home.recycler.RecipeMarginDecorator
 import com.example.recipes.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -85,6 +87,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupRecycler() {
         binding.rvHome.apply {
+            addItemDecoration(RecipeMarginDecorator(resources.getDimensionPixelSize(R.dimen.margin_small)))
             setOnTouchListener { _, _ -> hideKeyboard(requireActivity()) }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = recyclerAdapter
