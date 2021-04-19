@@ -1,14 +1,12 @@
 package com.example.recipes.repository
 
 import com.example.recipes.domain.model.Recipe
-import com.example.recipes.local.LocalDataSource
 import com.example.recipes.network.NetworkDataSource
 import com.example.recipes.utils.Result
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
-    private val network: NetworkDataSource,
-    private val local: LocalDataSource
+    private val network: NetworkDataSource
 ) : RecipeRepository {
 
     override suspend fun getRecipes(): Result<List<Recipe>> {

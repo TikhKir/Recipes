@@ -27,11 +27,11 @@ class RecipeHomeAdapter(
     inner class RecipeViewHolder(private val binding: ItemHomeRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(recipe: Recipe) {
-            binding.tvRecipeTitle.text = recipe.name
-            binding.tvRecipeDescription.text = recipe.description
-            binding.ivRecipeItemImage.loadImage(recipe.images.firstOrNull())
-            binding.root.setOnClickListener { itemClickListener.onRecipeItemClick(recipe.uuid) }
+        fun bind(recipe: Recipe) = with(binding) {
+            tvRecipeTitle.text = recipe.name
+            tvRecipeDescription.text = recipe.description
+            ivRecipeItemImage.loadImage(recipe.images.firstOrNull())
+            root.setOnClickListener { itemClickListener.onRecipeItemClick(recipe.uuid) }
         }
     }
 

@@ -30,6 +30,7 @@ fun SearchView.searchWatcherFlow(): Flow<String> = callbackFlow {
 }
 
 fun Spinner.setFakeSelectSkipWatcher(execute: (position: Int) -> Unit, defPosition: Int = 0) {
+    //эмитит только те select-события, которые инициированы пользователем
     val listener = object : AdapterView.OnItemSelectedListener {
         var previousIsNull = -1
         var notSkip = false

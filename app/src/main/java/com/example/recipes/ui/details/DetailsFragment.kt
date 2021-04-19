@@ -27,6 +27,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
     SimilarAdapter.OnItemClickListener {
 
     companion object {
+        private const val LOOP_FRAGMENT_TAG = "LOOP_DETAILS_FRAGMENT_TAG"
         private const val EXTRA_UUID = "EXTRA_UUID"
         fun newInstance(uuid: String): DetailsFragment {
             val args = Bundle().apply { putString(EXTRA_UUID, uuid) }
@@ -67,9 +68,10 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
     }
 
     private fun setupRecycler() {
-        binding.rvDetailsSimilar.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvDetailsSimilar.adapter = similarAdapter
+        binding.rvDetailsSimilar.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = similarAdapter
+        }
     }
 
     private fun observeViewModel() {
@@ -81,8 +83,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
             sliderAdapter.submitList(it.images)
             updateSimilar(it.similar)
             updateRecipeInfo(it)
-        }
-        )
+        })
     }
 
     private fun updateSimilar(similar: List<SimilarRecipe>) {
@@ -93,38 +94,32 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         }
     }
 
-    private fun updateRecipeInfo(recipe: Recipe) {
-        binding.tvDetailRecipeTitle.text = recipe.name
+    private fun updateRecipeInfo(recipe: Recipe) = with(binding) {
+        tvDetailRecipeTitle.text = recipe.name
 
-        if (recipe.description.isEmpty()) {
-            binding.tvDetailRecipeDescription.isVisible = false
-        } else {
-            binding.tvDetailRecipeDescription.text = recipe.description
-            binding.tvDetailRecipeDescription.isVisible = true
-        }
+        tvDetailRecipeDescription.isVisible = recipe.description.isNotEmpty()
+        tvDetailRecipeDescription.text = recipe.description
 
-        if (convertHtml(recipe.instructions).isEmpty()) {
-            binding.tvDetailRecipeInstructions.isVisible = false
-            binding.tvDetailInstructionsLabel.isVisible = false
-        } else {
-            binding.tvDetailRecipeInstructions.text = convertHtml(recipe.instructions)
-            binding.tvDetailRecipeInstructions.isVisible = true
-            binding.tvDetailInstructionsLabel.isVisible = true
-        }
+        val instruction = convertHtml(recipe.instructions)
+        tvDetailRecipeInstructions.isVisible = instruction.isNotEmpty()
+        tvDetailInstructionsLabel.isVisible = instruction.isNotEmpty()
+        tvDetailRecipeInstructions.text = instruction
     }
 
     private fun setupImageSlider() {
-        binding.vpImageSlide.adapter = sliderAdapter
-        binding.vpImageSlide.clipToPadding = false
-        binding.vpImageSlide.clipChildren = false
-        binding.vpImageSlide.offscreenPageLimit = 3
-        binding.vpImageSlide.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        binding.vpImageSlide.setPageTransformer(
-            CompositePageTransformer().apply {
-                addTransformer(MarginPageTransformer(40))
-                addTransformer(SliderPageTransformer())
-            }
-        )
+        binding.vpImageSlide.apply {
+            adapter = sliderAdapter
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            setPageTransformer(
+                CompositePageTransformer().apply {
+                    addTransformer(MarginPageTransformer(40))
+                    addTransformer(SliderPageTransformer())
+                }
+            )
+        }
     }
 
     private fun updateLoadingState(state: State) = when (state) {
@@ -134,19 +129,19 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         is State.Success -> setLoading(false)
     }
 
-    private fun setLoading(isLoading: Boolean) {
-        binding.svDetailContent.isVisible = !isLoading
-        binding.pbDetails.isVisible = isLoading
-        binding.tvDetailsErrorMessage.isVisible = false
-        binding.btnDetailsErrorRetry.isVisible = false
+    private fun setLoading(isLoading: Boolean) = with(binding) {
+        svDetailContent.isVisible = !isLoading
+        pbDetails.isVisible = isLoading
+        tvDetailsErrorMessage.isVisible = false
+        btnDetailsErrorRetry.isVisible = false
     }
 
-    private fun showErrorMessage(message: String) {
-        binding.svDetailContent.isVisible = false
-        binding.pbDetails.isVisible = false
-        binding.btnDetailsErrorRetry.isVisible = true
-        binding.tvDetailsErrorMessage.isVisible = true
-        binding.tvDetailsErrorMessage.text = message
+    private fun showErrorMessage(message: String) = with(binding) {
+        svDetailContent.isVisible = false
+        pbDetails.isVisible = false
+        btnDetailsErrorRetry.isVisible = true
+        tvDetailsErrorMessage.isVisible = true
+        tvDetailsErrorMessage.text = message
     }
 
     private fun setupRetryButton() {
@@ -159,14 +154,22 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
 
     override fun onImageClick(imageUrl: String) {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, PictureFragment.newInstance(imageUrl))
+            .add(R.id.main_fragment_container, PictureFragment.newInstance(imageUrl))
             .addToBackStack(null)
             .commit()
     }
 
     override fun onSimilarItemClick(uuid: String) {
+        /*хотя апи не предоставляет рецепты, которые имеют перекрестные ссылки друг на друга,
+        я добавил защиту от такого случая, чтобы не заполнять стек фрагментами
+        похожих рецептов, если пользователь будет переходить по ним многократно*/
+
+        val loopFragment = parentFragmentManager.findFragmentByTag(LOOP_FRAGMENT_TAG)
+        if (loopFragment != null) parentFragmentManager.popBackStack()
+
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, DetailsFragment.newInstance(uuid))
+            .add(R.id.main_fragment_container, DetailsFragment.newInstance(uuid), LOOP_FRAGMENT_TAG)
+            .addToBackStack(null)
             .commit()
     }
 

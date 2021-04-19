@@ -23,8 +23,6 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="retry">Retry</string>
     <string name="cooking_instructions">Cooking instructions:</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="save">Save</string>
     <string name="image_is_not_loaded">Image is not loaded</string>

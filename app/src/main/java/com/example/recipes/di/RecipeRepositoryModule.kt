@@ -1,6 +1,5 @@
 package com.example.recipes.di
 
-import com.example.recipes.local.LocalDataSource
 import com.example.recipes.network.NetworkDataSource
 import com.example.recipes.repository.RecipeRepository
 import com.example.recipes.repository.RecipeRepositoryImpl
@@ -18,7 +17,6 @@ object RecipeRepositoryModule {
     @Provides
     fun provideRepository(
         networkDataSource: NetworkDataSource,
-        localDataSource: LocalDataSource
-    ): RecipeRepository = RecipeRepositoryImpl(networkDataSource, localDataSource)
+    ): RecipeRepository = RecipeRepositoryImpl(networkDataSource)
 
 }
