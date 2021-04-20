@@ -28,4 +28,9 @@
     <string name="image_is_not_loaded">Image is not loaded</string>
     <string name="request_storage_dialog">This app require access to storage to save images</string>
     <string name="similar_recipes">Similar recipes</string>
+    <string name="very_easy">very easy</string>
+    <string name="easy">easy</string>
+    <string name="normal">normal</string>
+    <string name="difficult">difficult</string>
+    <string name="very_difficult">very difficult</string>
 </resources>

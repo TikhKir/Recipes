@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,7 +13,6 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:overScrollMode="never"
-        android:visibility="invisible"
         tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,30 +30,72 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <LinearLayout
+                android:id="@+id/difficulty_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vp_image_slide">
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb_difficulty"
+                    style="@style/DifficultyRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/difficulty_ratingbar_heign"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:scaleX=".65"
+                    android:scaleY=".65"
+                    android:stepSize="1" />
+
+                <TextView
+                    android:id="@+id/tv_difficulty_label"
+                    style="@style/RecipeStyle.Text.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    tools:layout_editor_absoluteY="32dp"
+                    tools:text="very difficult" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_detail_recipe_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_big"
-                android:layout_marginEnd="@dimen/margin_normal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/difficulty_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vp_image_slide"
                 tools:text="@tools:sample/lorem" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="tv_detail_recipe_title, difficulty_container" />
+
 
             <TextView
                 android:id="@+id/tv_detail_recipe_description"
                 style="@style/RecipeStyle.Text.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail_recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/barrier"
                 tools:text="@tools:sample/lorem/random" />
 
             <TextView

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
 import com.example.recipes.domain.model.Recipe
@@ -89,6 +88,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         })
     }
 
+
     private fun updateSimilar(similar: List<SimilarRecipe>) {
         if (similar.isNotEmpty()) {
             similarAdapter.submitList(similar)
@@ -107,6 +107,17 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         tvDetailRecipeInstructions.isVisible = instruction.isNotEmpty()
         tvDetailInstructionsLabel.isVisible = instruction.isNotEmpty()
         tvDetailRecipeInstructions.text = instruction
+
+        rbDifficulty.rating = recipe.difficulty.toFloat()
+
+        when (recipe.difficulty) {
+            1 -> tvDifficultyLabel.text = getString(R.string.very_easy)
+            2 -> tvDifficultyLabel.text = getString(R.string.easy)
+            3 -> tvDifficultyLabel.text = getString(R.string.normal)
+            4 -> tvDifficultyLabel.text = getString(R.string.difficult)
+            5 -> tvDifficultyLabel.text = getString(R.string.very_difficult)
+            else -> difficultyContainer.isVisible = false
+        }
     }
 
     private fun setupImageSlider() {
@@ -118,7 +129,6 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
             getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             setPageTransformer(
                 CompositePageTransformer().apply {
-                    addTransformer(MarginPageTransformer(resources.getDimensionPixelSize(R.dimen.item_page_margin)))
                     addTransformer(SliderPageTransformer())
                 }
             )

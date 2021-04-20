@@ -47,7 +47,7 @@ class ImageSaver @Inject constructor(private val context: Context) {
 
                 outputStream = imageUri?.let { resolver.openOutputStream(it) }
             } else {
-                val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 val imageFile = File(directory.absolutePath, "$fileName.jpg")
                 outputStream = FileOutputStream(imageFile)
                 startMediaScan(Uri.fromFile(imageFile))

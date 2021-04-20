@@ -18,5 +18,6 @@ class SliderPageTransformer : ViewPager2.PageTransformer {
 
         val positionOffset = 1F - abs(position)
         page.scaleY = (1F - zoomValue) + positionOffset * zoomValue
+        page.scaleX = (1F - zoomValue) + positionOffset * zoomValue
     }
 }
