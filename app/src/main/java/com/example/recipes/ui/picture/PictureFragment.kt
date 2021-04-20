@@ -163,5 +163,10 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         (activity as MainActivity).fullScreenModeOff()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }

@@ -191,8 +191,8 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         outState.putCharSequence(SEARCH_VIEW_QUERY_KEY, searchQuery)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

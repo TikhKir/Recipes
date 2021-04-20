@@ -9,5 +9,6 @@
     <dimen name="item_similar_height">180dp</dimen>
     <dimen name="item_home_recipe_height">110dp</dimen>
     <dimen name="item_pager_counter_corner">10dp</dimen>
+    <dimen name="item_page_margin">20dp</dimen>
     <dimen name="cover_limiter">1dp</dimen>
 </resources>

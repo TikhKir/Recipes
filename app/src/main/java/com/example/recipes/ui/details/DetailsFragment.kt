@@ -118,7 +118,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
             getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             setPageTransformer(
                 CompositePageTransformer().apply {
-                    addTransformer(MarginPageTransformer(40))
+                    addTransformer(MarginPageTransformer(resources.getDimensionPixelSize(R.dimen.item_page_margin)))
                     addTransformer(SliderPageTransformer())
                 }
             )
@@ -176,8 +176,10 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
             .commit()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
+
+
 }

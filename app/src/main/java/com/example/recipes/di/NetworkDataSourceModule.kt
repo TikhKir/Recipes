@@ -1,9 +1,9 @@
 package com.example.recipes.di
 
+import com.example.recipes.BuildConfig
 import com.example.recipes.network.NetworkDataSource
 import com.example.recipes.network.NetworkDataSourceImpl
 import com.example.recipes.network.RecipeService
-import com.example.recipes.utils.BASE_RECIPE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,7 @@ object NetworkDataSourceModule {
     fun provideRecipeRetrofit(): Retrofit =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_RECIPE_URL)
+            .baseUrl(BuildConfig.RECIPE_BASE_URL)
             .build()
 
     @Singleton
