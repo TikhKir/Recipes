@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipes.domain.RecipesHandleUseCase
+import com.example.recipes.domain.SortAndSearchRecipesUseCase
 import com.example.recipes.domain.model.Recipe
-import com.example.recipes.repository.RecipeRepository
 import com.example.recipes.utils.SEARCH_MIN_QUERY
 import com.example.recipes.utils.State
 import com.example.recipes.utils.filterparameters.SearchType
@@ -19,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repo: RecipeRepository
+    private val sortAndSearchUseCase: SortAndSearchRecipesUseCase
 ) : ViewModel() {
     companion object {
         private const val TAG = "HOME_VIEW_MODEL"
@@ -30,7 +29,6 @@ class HomeViewModel @Inject constructor(
     private var sortType: SortType = SortType.Unsorted
     private var searchQuery: String? = null
 
-    private var rawRecipes = listOf<Recipe>()
     private val recipesMutable = MutableLiveData<List<Recipe>>()
     val recipesLD: LiveData<List<Recipe>> get() = recipesMutable
 
@@ -41,23 +39,18 @@ class HomeViewModel @Inject constructor(
         getRecipes()
     }
 
-    fun getRecipes() = viewModelScope.launch(Dispatchers.IO) {
+
+    fun getRecipes(forcedUpdate: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         state.postValue(State.Loading())
-        repo.getRecipes()
-            .onSuccess { newList ->
-                rawRecipes = newList
-                handleRecipes()
+
+        sortAndSearchUseCase.execute(searchQuery, searchType, sortType, forcedUpdate)
+            .onSuccess {
+                recipesMutable.postValue(it)
                 state.postValue(State.Success())
             }.onError {
                 Log.e(TAG, it.message.toString())
                 state.postValue(State.Error(it.message.toString()))
             }
-    }
-
-    private fun handleRecipes() = viewModelScope.launch {
-        recipesMutable.postValue(
-            RecipesHandleUseCase.execute(rawRecipes, searchQuery, searchType, sortType)
-        )
     }
 
 
@@ -67,7 +60,7 @@ class HomeViewModel @Inject constructor(
             2 -> SearchType.ByInstruction
             else -> SearchType.ByName
         }
-        if (searchQuery != null) handleRecipes()
+        if (searchQuery != null) getRecipes()
     }
 
     fun setSortSpinnerState(position: Int) {
@@ -78,12 +71,12 @@ class HomeViewModel @Inject constructor(
             4 -> SortType.ByLastUpdateDesc
             else -> SortType.Unsorted
         }
-        handleRecipes()
+        getRecipes()
     }
 
     fun setSearchQuery(query: String) {
         searchQuery = if (query.length >= SEARCH_MIN_QUERY) query else null
-        handleRecipes()
+        getRecipes()
     }
 
 

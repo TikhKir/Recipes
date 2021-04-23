@@ -9,9 +9,16 @@ class RecipeRepositoryImpl @Inject constructor(
     private val network: NetworkDataSource
 ) : RecipeRepository {
 
-    override suspend fun getRecipes(): Result<List<Recipe>> {
-        return network.getRecipeList()
+    private var cachedRecipesResult: Result<List<Recipe>> = Result.Success(listOf())
+
+    override suspend fun getRecipes(forcedUpdate: Boolean): Result<List<Recipe>> {
+        if (cachedRecipesResult.resultIsEmpty() || forcedUpdate) {
+            cachedRecipesResult = network.getRecipeList()
+        }
+        return cachedRecipesResult
     }
+
+
 
     override suspend fun getRecipeByUUID(uuid: String): Result<Recipe> {
         return network.getRecipeByUUID(uuid)
