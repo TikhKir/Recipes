@@ -15,8 +15,7 @@ object RecipeRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
-        networkDataSource: NetworkDataSource,
-    ): RecipeRepository = RecipeRepositoryImpl(networkDataSource)
+    fun provideRepository(networkDataSource: NetworkDataSource, ): RecipeRepository =
+        RecipeRepositoryImpl(networkDataSource)
 
 }
