@@ -21,5 +21,15 @@ sealed class Result<out T> {
         }
     }
 
+    fun resultIsEmpty(): Boolean {
+        return if (this is Success) {
+            if (this.data is Collection<*>) {
+                this.data.isEmpty()
+            } else true
+        } else {
+            true
+        }
+    }
+
 
 }

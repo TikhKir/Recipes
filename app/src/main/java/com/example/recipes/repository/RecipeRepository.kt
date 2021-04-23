@@ -5,7 +5,7 @@ import com.example.recipes.utils.Result
 
 interface RecipeRepository {
 
-    suspend fun getRecipes(): Result<List<Recipe>>
+    suspend fun getRecipes(forcedUpdate: Boolean): Result<List<Recipe>>
 
     suspend fun getRecipeByUUID(uuid: String): Result<Recipe>
 
