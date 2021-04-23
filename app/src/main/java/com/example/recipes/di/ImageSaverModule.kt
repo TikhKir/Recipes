@@ -15,7 +15,6 @@ object ImageSaverModule {
 
     @Provides
     @Singleton
-    fun provideImageSaver(@ApplicationContext context: Context): ImageSaver =
-        ImageSaver(context)
+    fun provideImageSaver(@ApplicationContext context: Context): ImageSaver = ImageSaver(context)
 
 }

@@ -12,7 +12,6 @@ import com.example.recipes.utils.State
 import com.example.recipes.utils.filterparameters.SearchType
 import com.example.recipes.utils.filterparameters.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,9 +39,8 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getRecipes(forcedUpdate: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    fun getRecipes(forcedUpdate: Boolean = false) = viewModelScope.launch {
         state.postValue(State.Loading())
-
         sortAndSearchUseCase.execute(searchQuery, searchType, sortType, forcedUpdate)
             .onSuccess {
                 recipesMutable.postValue(it)
@@ -54,23 +52,13 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun setSearchSpinnerState(position: Int) {
-        searchType = when (position) {
-            1 -> SearchType.ByDescription
-            2 -> SearchType.ByInstruction
-            else -> SearchType.ByName
-        }
+    fun setSearchSpinnerState(type: SearchType) {
+        searchType = type
         if (searchQuery != null) getRecipes()
     }
 
-    fun setSortSpinnerState(position: Int) {
-        sortType = when (position) {
-            1 -> SortType.ByNameAsc
-            2 -> SortType.ByNameDesc
-            3 -> SortType.ByLastUpdateAsc
-            4 -> SortType.ByLastUpdateDesc
-            else -> SortType.Unsorted
-        }
+    fun setSortSpinnerState(type: SortType) {
+        sortType = type
         getRecipes()
     }
 

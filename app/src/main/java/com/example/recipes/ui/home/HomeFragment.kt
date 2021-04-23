@@ -17,6 +17,8 @@ import com.example.recipes.ui.details.DetailsFragment
 import com.example.recipes.ui.home.recycler.RecipeHomeAdapter
 import com.example.recipes.ui.home.recycler.RecipeMarginDecorator
 import com.example.recipes.utils.*
+import com.example.recipes.utils.filterparameters.getSearchType
+import com.example.recipes.utils.filterparameters.getSortType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -104,7 +106,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             binding.spnSearchOver.adapter = it
         }
         binding.spnSearchOver.setFakeSelectSkipWatcher({
-            viewModel.setSearchSpinnerState(it)
+            viewModel.setSearchSpinnerState(getSearchType(it))
             scrollToTopFlag = true
         })
     }
@@ -119,7 +121,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
             binding.spnSort.adapter = it
         }
         binding.spnSort.setFakeSelectSkipWatcher({
-            viewModel.setSortSpinnerState(it)
+            viewModel.setSortSpinnerState(getSortType(it))
             scrollToTopFlag = true
         })
     }
