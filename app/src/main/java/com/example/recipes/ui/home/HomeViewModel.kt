@@ -11,11 +11,9 @@ import com.example.recipes.utils.SEARCH_MIN_QUERY
 import com.example.recipes.utils.State
 import com.example.recipes.utils.filterparameters.SearchType
 import com.example.recipes.utils.filterparameters.SortType
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val sortAndSearchUseCase: SortAndSearchRecipesUseCase
 ) : ViewModel() {

@@ -14,7 +14,7 @@ sealed class Result<out T> {
         return this
     }
 
-    inline fun <R> transformInside(transform: (result: T) -> R): Result<R> {
+    inline fun <R> transformInside(transform: (T) -> R): Result<R> {
         return when (this) {
             is Success -> Success(transform(this.data))
             is Error -> this

@@ -21,9 +21,8 @@ import com.example.recipes.ui.details.slider.SliderPageTransformer
 import com.example.recipes.ui.picture.PictureFragment
 import com.example.recipes.utils.State
 import com.example.recipes.utils.convertHtml
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+
 class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
     SimilarAdapter.OnItemClickListener {
 

@@ -19,7 +19,6 @@ import com.example.recipes.ui.home.recycler.RecipeMarginDecorator
 import com.example.recipes.utils.*
 import com.example.recipes.utils.filterparameters.getSearchType
 import com.example.recipes.utils.filterparameters.getSortType
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +26,6 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 
-@AndroidEntryPoint
 class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
 
     companion object {

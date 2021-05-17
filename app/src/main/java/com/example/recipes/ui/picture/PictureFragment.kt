@@ -20,12 +20,10 @@ import com.example.recipes.databinding.PictureFragmentBinding
 import com.example.recipes.utils.ImageSaver
 import com.example.recipes.utils.REQUEST_CODE_WRITE_PERMISSION
 import com.example.recipes.utils.StorageUtility
-import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     companion object {
@@ -37,8 +35,7 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    @Inject
-    lateinit var imageSaver: ImageSaver
+    @Inject lateinit var imageSaver: ImageSaver
     private var bitmapToSave: Bitmap? = null
 
     private var _binding: PictureFragmentBinding? = null

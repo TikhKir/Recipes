@@ -8,12 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.repository.RecipeRepository
 import com.example.recipes.utils.State
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val repo: RecipeRepository
 ) : ViewModel() {
