@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
@@ -34,13 +34,15 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         private const val SEARCH_VIEW_QUERY_KEY = "SEARCH_VIEW_QUERY_KEY"
     }
 
+    private val component by lazy { HomeFragmentComponent.create() }
+    private val viewModel by viewModels<HomeViewModel> { component.viewModelFactory() }
+
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var searchView: SearchView
     private val recyclerAdapter = RecipeHomeAdapter(this)
     private var searchQuery: CharSequence? = null
+    private lateinit var searchView: SearchView
     private var scrollToTopFlag = false
 
 
@@ -54,7 +56,6 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -35,11 +35,13 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         }
     }
 
+    private val component by lazy { DetailsFragmentComponent.create() }
+    private val viewModel by viewModels<DetailsViewModel> { component.viewModelFactory() }
+
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var uuidArg: String
-    private lateinit var viewModel: DetailsViewModel
     private val sliderAdapter = SliderAdapter(this)
     private val similarAdapter = SimilarAdapter(this)
 
@@ -54,7 +56,6 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
         initArgs()
     }
 
