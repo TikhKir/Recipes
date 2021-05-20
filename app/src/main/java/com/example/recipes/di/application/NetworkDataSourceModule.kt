@@ -1,4 +1,4 @@
-package com.example.recipes.di
+package com.example.recipes.di.application
 
 import com.example.recipes.BuildConfig
 import com.example.recipes.network.NetworkDataSource
@@ -15,16 +15,12 @@ object NetworkDataSourceModule {
 
     @Singleton
     @Provides
-    fun provideRecipeRetrofit(): Retrofit =
+    fun provideRecipeService(): RecipeService =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.RECIPE_BASE_URL)
             .build()
-
-    @Singleton
-    @Provides
-    fun provideRecipeService(retrofit: Retrofit): RecipeService =
-        retrofit.create(RecipeService::class.java)
+            .create(RecipeService::class.java)
 
     @Singleton
     @Provides

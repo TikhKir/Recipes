@@ -1,12 +1,19 @@
 package com.example.recipes
 
 import android.app.Application
-import com.example.recipes.di.DaggerAppComponent
+import com.example.recipes.di.application.DaggerAppComponent
+
 
 class RecipeApp : Application() {
 
-    val appComponent = DaggerAppComponent.builder()
-        .appContext(this)
-        .build()
+    override fun onCreate() {
+        super.onCreate()
+        initDI()
+    }
 
+    private fun initDI() {
+        DI.appComponent = DaggerAppComponent
+            .factory()
+            .create(this)
+    }
 }

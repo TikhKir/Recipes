@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.recipes.DI
 import com.example.recipes.R
 import com.example.recipes.databinding.HomeFragmentBinding
 import com.example.recipes.ui.details.DetailsFragment
@@ -34,7 +35,7 @@ class HomeFragment : Fragment(), RecipeHomeAdapter.OnItemClickListener {
         private const val SEARCH_VIEW_QUERY_KEY = "SEARCH_VIEW_QUERY_KEY"
     }
 
-    private val component by lazy { HomeFragmentComponent.create() }
+    private val component by lazy { DI.appComponent.plusFragmentComponent().create() }
     private val viewModel by viewModels<HomeViewModel> { component.viewModelFactory() }
 
     private var _binding: HomeFragmentBinding? = null

@@ -1,4 +1,4 @@
-package com.example.recipes.di
+package com.example.recipes.di.application
 
 import com.example.recipes.domain.SortAndSearchRecipesUseCase
 import com.example.recipes.repository.RecipeRepository

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
+import com.example.recipes.DI
 import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
 import com.example.recipes.domain.model.Recipe
@@ -35,7 +36,7 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         }
     }
 
-    private val component by lazy { DetailsFragmentComponent.create() }
+    private val component by lazy { DI.appComponent.plusFragmentComponent().create() }
     private val viewModel by viewModels<DetailsViewModel> { component.viewModelFactory() }
 
     private var _binding: DetailsFragmentBinding? = null

@@ -1,4 +1,4 @@
-package com.example.recipes.di
+package com.example.recipes.di.application
 
 import com.example.recipes.network.NetworkDataSource
 import com.example.recipes.repository.RecipeRepository

@@ -1,4 +1,4 @@
-package com.example.recipes.di
+package com.example.recipes.di.application
 
 import android.content.Context
 import com.example.recipes.utils.ImageSaver

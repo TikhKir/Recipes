@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.recipes.DI
 import com.example.recipes.MainActivity
 import com.example.recipes.R
-import com.example.recipes.RecipeApp
 import com.example.recipes.databinding.PictureFragmentBinding
 import com.example.recipes.utils.ImageSaver
 import com.example.recipes.utils.REQUEST_CODE_WRITE_PERMISSION
@@ -59,7 +59,7 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().applicationContext as RecipeApp).appComponent.inject(this)
+        DI.appComponent.inject(this)
         visibility = savedInstanceState?.getBoolean(VISIBILITY_KEY) ?: false
         (activity as MainActivity).fullScreenModeOn()
         initArgs()
