@@ -19,6 +19,6 @@ Single-activity android app writen in Kotlin.
 ## Libraries & Dependencies
 -   Retrofit
 -   Glide
--   Dagger Hilt
+-   Hilt (there is also a branch with a pure Dagger2 implementation)
 -   Coroutines
 
