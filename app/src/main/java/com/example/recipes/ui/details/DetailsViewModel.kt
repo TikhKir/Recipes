@@ -9,7 +9,6 @@ import com.example.recipes.domain.model.Recipe
 import com.example.recipes.repository.RecipeRepository
 import com.example.recipes.utils.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +26,7 @@ class DetailsViewModel @Inject constructor(
     private val state = MutableLiveData<State>(State.Default())
     val stateLD: LiveData<State> get() = state
 
-    fun getRecipe(uuid: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun getRecipe(uuid: String) = viewModelScope.launch {
         state.postValue(State.Loading())
         repo.getRecipeByUUID(uuid)
             .onSuccess {

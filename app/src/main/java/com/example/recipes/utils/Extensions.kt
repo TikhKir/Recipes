@@ -21,7 +21,7 @@ fun SearchView.searchWatcherFlow(): Flow<String> = callbackFlow {
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
-            offer(newText)
+            offer(newText ?: "")
             return false
         }
     }
