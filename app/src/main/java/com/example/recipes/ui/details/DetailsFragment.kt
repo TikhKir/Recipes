@@ -10,9 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import com.example.recipes.DI
 import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
+import com.example.recipes.di.common.HasDetailsFragmentComponent
+import com.example.recipes.di.common.HomeFragmentComponentFinder
+import com.example.recipes.di.common.scopedComponent
+import com.example.recipes.di.fragments.details.DetailsFragmentComponent
 import com.example.recipes.domain.model.Recipe
 import com.example.recipes.domain.model.SimilarRecipe
 import com.example.recipes.ui.details.recycler.SimilarAdapter
@@ -24,7 +27,7 @@ import com.example.recipes.utils.State
 import com.example.recipes.utils.convertHtml
 
 
-class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
+class DetailsFragment : Fragment(), HasDetailsFragmentComponent, SliderAdapter.OnImageClickListener,
     SimilarAdapter.OnItemClickListener {
 
     companion object {
@@ -36,7 +39,9 @@ class DetailsFragment : Fragment(), SliderAdapter.OnImageClickListener,
         }
     }
 
-    private val component by lazy { DI.appComponent.plusFragmentComponent().create() }
+    override val component: DetailsFragmentComponent by scopedComponent {
+        HomeFragmentComponentFinder.find(this).detailsFragmentComponent().create()
+    }
     private val viewModel by viewModels<DetailsViewModel> { component.viewModelFactory() }
 
     private var _binding: DetailsFragmentBinding? = null

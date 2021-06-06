@@ -1,4 +1,4 @@
-package com.example.recipes
+package com.example.recipes.di
 
 import com.example.recipes.di.application.AppComponent
 

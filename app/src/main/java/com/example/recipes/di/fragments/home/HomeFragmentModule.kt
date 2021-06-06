@@ -1,4 +1,4 @@
-package com.example.recipes.di.fragments
+package com.example.recipes.di.fragments.home
 
 import androidx.lifecycle.ViewModel
 import com.example.recipes.di.viewmodels.ViewModelKey

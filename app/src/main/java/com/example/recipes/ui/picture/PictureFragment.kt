@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.recipes.DI
 import com.example.recipes.MainActivity
 import com.example.recipes.R
 import com.example.recipes.databinding.PictureFragmentBinding
+import com.example.recipes.di.common.DetailsFragmentComponentFinder
+import com.example.recipes.di.common.scopedComponent
+import com.example.recipes.di.fragments.picture.PictureFragmentComponent
 import com.example.recipes.utils.ImageSaver
 import com.example.recipes.utils.REQUEST_CODE_WRITE_PERMISSION
 import com.example.recipes.utils.StorageUtility
@@ -34,6 +36,10 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             val args = Bundle().apply { putString(EXTRA_IMAGE_URL, imageUrl) }
             return PictureFragment().apply { arguments = args }
         }
+    }
+
+    private val component: PictureFragmentComponent by scopedComponent {
+        DetailsFragmentComponentFinder.find(this).pictureFragmentComponent().create()
     }
 
     @Inject lateinit var imageSaver: ImageSaver
@@ -58,8 +64,8 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
-        DI.appComponent.inject(this)
         visibility = savedInstanceState?.getBoolean(VISIBILITY_KEY) ?: false
         (activity as MainActivity).fullScreenModeOn()
         initArgs()
