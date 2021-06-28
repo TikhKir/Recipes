@@ -9,7 +9,7 @@ import com.example.recipes.ui.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FullScreenAble {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,8 +21,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun fullScreenModeOn() {
+    override fun fullscreenOn() {
         if (Build.VERSION.SDK_INT >= 30) {
             window.insetsController?.apply {
                 hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun fullScreenModeOff() {
+    override fun fullscreenOff() {
         if (Build.VERSION.SDK_INT >= 30) {
             window.insetsController?.apply {
                 show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
@@ -47,7 +46,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
 
-
-
+interface FullScreenAble {
+    fun fullscreenOn()
+    fun fullscreenOff()
 }
