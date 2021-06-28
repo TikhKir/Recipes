@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
 import com.example.recipes.databinding.HomeFragmentBinding
-import com.example.recipes.di.common.AppComponentFinder
-import com.example.recipes.di.common.HasHomeFragmentComponent
+import com.example.recipes.di.AppComponentFinder
+import com.example.recipes.di.HasHomeFragmentComponent
 import com.example.recipes.di.common.scopedComponent
 import com.example.recipes.di.fragments.home.HomeFragmentComponent
 import com.example.recipes.ui.details.DetailsFragment

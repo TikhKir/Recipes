@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import com.example.recipes.R
 import com.example.recipes.databinding.DetailsFragmentBinding
-import com.example.recipes.di.common.HasDetailsFragmentComponent
-import com.example.recipes.di.common.HomeFragmentComponentFinder
+import com.example.recipes.di.HasDetailsFragmentComponent
+import com.example.recipes.di.HomeFragmentComponentFinder
 import com.example.recipes.di.common.scopedComponent
 import com.example.recipes.di.fragments.details.DetailsFragmentComponent
 import com.example.recipes.domain.model.Recipe

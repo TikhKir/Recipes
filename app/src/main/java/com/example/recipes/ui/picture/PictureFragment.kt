@@ -14,10 +14,10 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.recipes.MainActivity
+import com.example.recipes.FullScreenAble
 import com.example.recipes.R
 import com.example.recipes.databinding.PictureFragmentBinding
-import com.example.recipes.di.common.DetailsFragmentComponentFinder
+import com.example.recipes.di.DetailsFragmentComponentFinder
 import com.example.recipes.di.common.scopedComponent
 import com.example.recipes.di.fragments.picture.PictureFragmentComponent
 import com.example.recipes.utils.ImageSaver
@@ -67,7 +67,7 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         component.inject(this)
         super.onCreate(savedInstanceState)
         visibility = savedInstanceState?.getBoolean(VISIBILITY_KEY) ?: false
-        (activity as MainActivity).fullScreenModeOn()
+        (activity as FullScreenAble).fullscreenOn()
         initArgs()
     }
 
@@ -165,7 +165,7 @@ class PictureFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     override fun onDetach() {
         super.onDetach()
-        (activity as MainActivity).fullScreenModeOff()
+        (activity as FullScreenAble).fullscreenOff()
     }
 
     override fun onDestroyView() {

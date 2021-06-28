@@ -1,7 +1,8 @@
-package com.example.recipes.di.common
+package com.example.recipes.di
 
 import androidx.fragment.app.Fragment
 import com.example.recipes.di.application.AppComponent
+import com.example.recipes.di.common.ComponentFinder
 import com.example.recipes.di.fragments.details.DetailsFragmentComponent
 import com.example.recipes.di.fragments.home.HomeFragmentComponent
 
